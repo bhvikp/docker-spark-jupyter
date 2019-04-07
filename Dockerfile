@@ -14,13 +14,17 @@ RUN \
   zip \
   openjdk-8-jdk
 
-RUN pip install jupyter
-
+COPY binaries/spark-2.4.0-bin-hadoop2.7.tgz .
+COPY binaries/livy-0.5.0-incubating-bin.1.zip .
 COPY script/env.sh .
+COPY config/requirements.txt .
+
+RUN pip install jupyter
+RUN pip install -r requirements.txt
 
 RUN \
-  wget http://mirrors.estointernet.in/apache/hadoop/common/hadoop-3.1.2/hadoop-3.1.2.tar.gz && \
   wget http://mirrors.estointernet.in/apache/spark/spark-2.4.0/spark-2.4.0-bin-hadoop2.7.tgz && \
+  wget http://archive.apache.org/dist/incubator/livy/0.5.0-incubating/livy-0.5.0-incubating-bin.zip && \
   mkdir -p ${HOME}/notebooks && \
   tar xzf spark-2.4.0-bin-hadoop2.7.tgz && \
   unzip livy-0.5.0-incubating-bin.1.zip && \
@@ -42,6 +46,6 @@ COPY config/jupyter_notebook_config.py .jupyter/
 
 ENV PATH /opt/conda/envs/env/bin:$PATH
 
-EXPOSE 8998 4040 8888
+EXPOSE 8998 4040 4041 8888
 
 CMD ["jupyter","notebook"]

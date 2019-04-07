@@ -14,13 +14,13 @@ Dockerized development environment with spark, jupyter, livy
 
 Pull docker image from docker hub repository
 ```sh
-$ docker pull bhavik9243/datascience-book:v1
+$ docker pull bhavik9243/datascience-book:latest
 ```
 
 ### Run/Start/Stop Container
 
 ```sh
-$ docker run -itd --name ds_book --hostname localhost -p 8888:8888 -p 8998:8998 -p 4040:4040 bhavik9243/datascience-book:v1
+$ docker run -itd --name ds_book --hostname localhost -p 8888:8888 -p 8998:8998 -p 4040:4040 bhavik9243/datascience-book:latest
 $ docker start ds_book
 $ docker stop ds_book
 ```

@@ -27,7 +27,8 @@ $ docker stop ds_book
 
 ### Jupyter Access
 
-> **Jupyter Notebook** : [http://127.0.0.1:8888](http://127.0.0.1:8888) \n
+> **Jupyter Notebook** : [http://127.0.0.1:8888](http://127.0.0.1:8888)
+
 > **Password** : `letmein`
 
 #### Enjoy!! :)

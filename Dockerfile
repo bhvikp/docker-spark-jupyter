@@ -14,8 +14,6 @@ RUN \
   zip \
   openjdk-8-jdk
 
-COPY binaries/spark-2.4.0-bin-hadoop2.7.tgz .
-COPY binaries/livy-0.5.0-incubating-bin.1.zip .
 COPY script/env.sh .
 COPY config/requirements.txt .
 
@@ -34,6 +32,10 @@ RUN \
   rm -rf spark-2.4.0-bin-hadoop2.7.tgz livy-0.5.0-incubating-bin.1.zip env.sh
 
 WORKDIR ${HOME}
+
+COPY config/*.conf /opt/spark/conf/
+COPY libs/*.zip .
+RUN unzip s3libs.zip && rm -f s3libs.zip
 
 RUN ipython profile create pyspark
 RUN mkdir -p .ipython/kernels/pyspark

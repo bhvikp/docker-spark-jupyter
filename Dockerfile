@@ -1,53 +1,37 @@
-FROM continuumio/miniconda3:latest
+FROM python:3.7-slim
 
+ENV SPARK_VERSION 2.4.5
+ENV HADOOP_VERSION 2.7
 ENV SPARK_HOME /opt/spark
-ENV LIVY_HOME /opt/livy
-ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
+ENV JAVA_HOME /opt/java
+ENV LD_LIBRARY_PATH /opt/hadoop/lib/native
+ENV PATH $SPARK_HOME/bin:$JAVA_HOME/bin:$PATH
 ENV HOME /root
 
 RUN \
-  apt-get update && apt-get install -y \
-  ssh \
-  rsync \
-  vim \
-  sudo \
-  zip \
-  openjdk-8-jdk
+  mkdir -p /usr/share/man/man1 && \
+  apt-get update && apt-get install -y ssh rsync vim sudo zip wget
 
-COPY script/env.sh .
-COPY config/requirements.txt .
-
-RUN pip install jupyter
-RUN pip install -r requirements.txt
+COPY lib/native ${LD_LIBRARY_PATH}
 
 RUN \
-  wget http://mirrors.estointernet.in/apache/spark/spark-2.4.0/spark-2.4.0-bin-hadoop2.7.tgz && \
-  wget http://archive.apache.org/dist/incubator/livy/0.5.0-incubating/livy-0.5.0-incubating-bin.zip && \
-  mkdir -p ${HOME}/notebooks && \
-  tar xzf spark-2.4.0-bin-hadoop2.7.tgz && \
-  unzip livy-0.5.0-incubating-bin.1.zip && \
-  mv spark-2.4.0-bin-hadoop2.7 $SPARK_HOME && \
-  mv livy-0.5.0-incubating-bin $LIVY_HOME && \
-  chmod +x env.sh && bash env.sh && \
-  rm -rf spark-2.4.0-bin-hadoop2.7.tgz livy-0.5.0-incubating-bin.1.zip env.sh
+  wget https://raw.githubusercontent.com/bhavik9243/openjdk-binaries/master/open-jdk/download/OpenJDK8U-jre_x64_linux_hotspot_8u252b09.tar.gz && \
+  tar xzf OpenJDK8U-jre_x64_linux_hotspot_8u252b09.tar.gz && \
+  mv jdk8u252-b09-jre ${JAVA_HOME} && \
+  rm -rf OpenJDK8U-jre_x64_linux_hotspot_8u252b09.tar.gz && \
+  wget http://mirrors.estointernet.in/apache/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz && \
+  tar xzf spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz && \
+  mv spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION} ${SPARK_HOME} && \
+  rm -rf spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz && \
+  pip install jupyter pandas boto3
 
 WORKDIR ${HOME}
 
-COPY config/*.conf /opt/spark/conf/
-COPY libs/*.zip .
-RUN unzip s3libs.zip && rm -f s3libs.zip
-
-RUN ipython profile create pyspark
+RUN ipython profile create pyspark && jupyter notebook --generate-config
 RUN mkdir -p .ipython/kernels/pyspark
 COPY config/00-default-setup.py .ipython/profile_pyspark/startup/
 COPY config/00-default-setup.py .ipython/profile_default/startup/
 COPY config/kernel.json .ipython/kernels/pyspark
-
-RUN jupyter notebook --generate-config
 COPY config/jupyter_notebook_config.py .jupyter/
-
-ENV PATH /opt/conda/envs/env/bin:$PATH
-
-EXPOSE 8998 4040 4041 8888
 
 CMD ["jupyter","notebook"]

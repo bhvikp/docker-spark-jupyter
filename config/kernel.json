@@ -1,8 +1,8 @@
 {
-    "display_name": "PySpark (Spark 2.4.0)",
+    "display_name": "PySpark (Spark 2.4.5)",
     "language": "python",
     "argv": [
-    "/opt/conda/bin/python",
+    "/usr/local/bin/python",
     "-m",
     "ipykernel",
     "-f",

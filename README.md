@@ -1,14 +1,13 @@
-# docker-spark-jupyter-livy
-Dockerized development environment with spark, jupyter, livy
+# docker-spark-jupyter
+Dockerized development environment with spark, jupyter
 
 ### Features!
 
-    - Apache Spark 2.4.0
+    - Apache Spark 2.4.5
     - Jupyter Notebook
-    - Conda Environment
-    - Apache Livy
-    - Sklearn
-    - Tensorflow
+    - Pandas
+    - Boto3
+    - AWSCLI
 
 ### Installation
 
@@ -20,7 +19,7 @@ $ docker pull bhavik9243/datascience-book:latest
 ### Run/Start/Stop Container
 
 ```sh
-$ docker run -itd --name ds_book --hostname localhost -v /Users/bhavik/work/notebooks:/root/notebooks -p 8888:8888 -p 8998:8998 -p 4040:4040 bhavik9243/datascience-book:latest
+$ docker run -itd --name ds_book --hostname localhost -v $PWD/notebooks:/root/notebooks -p 8888:8888 -p 4040:4040 bhavik9243/datascience-book:latest
 $ docker start ds_book
 $ docker stop ds_book
 ```
@@ -31,4 +30,4 @@ $ docker stop ds_book
 >
 > **Password** : `letmein`
 
-#### Enjoy!! :)
+#### Enjoy :)

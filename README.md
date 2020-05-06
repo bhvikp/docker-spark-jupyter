@@ -1,14 +1,14 @@
-# docker-spark-jupyter-livy
-Dockerized development environment with spark, jupyter, livy
+# docker-spark-jupyter
+Dockerized development environment with spark, jupyter
 
 ### Features!
 
-    - Apache Spark 2.4.0
+    - Apache Spark 2.4.5
     - Jupyter Notebook
-    - Conda Environment
     - Apache Livy
-    - Sklearn
-    - Tensorflow
+    - Pandas
+    - Boto3
+    - AWSCLI
 
 ### Installation
 
@@ -31,4 +31,4 @@ $ docker stop ds_book
 >
 > **Password** : `letmein`
 
-#### Enjoy!! :)
+#### Enjoy :)
